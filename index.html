@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIRAM STORE</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;scroll-behavior:smooth}
+body{background:linear-gradient(135deg,#020617,#064e3b);color:white;overflow-x:hidden}
+header{width:100%;padding:20px 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);border-bottom:1px solid rgba(34,197,94,.4);position:sticky;top:0;z-index:1000}
+.menu-area{position:relative;padding-bottom:18px}
+.menu-btn{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(34,197,94,.4);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;cursor:pointer}
+.menu-btn span{width:24px;height:3px;background:#22c55e;border-radius:10px}
+.dropdown-menu{position:absolute;top:58px;left:0;width:240px;background:#06110f;border:1px solid rgba(34,197,94,.5);border-radius:18px;padding:15px;display:none;box-shadow:0 0 30px rgba(34,197,94,.25);z-index:3000}
+.menu-area:hover .dropdown-menu,.menu-area.active .dropdown-menu{display:block}
+.dropdown-menu h2{color:#22c55e;font-size:20px;margin-bottom:15px}
+.dropdown-menu a{display:block;color:white;text-decoration:none;padding:13px;border-radius:12px;cursor:pointer}
+.dropdown-menu a:hover{background:#22c55e;color:black}
+.logo{text-align:center}.logo h1{color:#22c55e}.logo p{color:#aaa;font-size:14px}
+.hero{text-align:center;padding:90px 20px 50px}.badge{display:inline-block;padding:12px 20px;border:1px solid #22c55e;border-radius:20px;color:#22c55e;margin-bottom:25px}
+.hero h2{font-size:60px;margin-bottom:20px}.hero span{color:#22c55e;text-shadow:0 0 20px #22c55e}.hero p{color:#ccc}
+.search-box{width:100%;display:flex;justify-content:center;margin-top:35px}
+.search-box input{width:100%;max-width:500px;padding:18px 25px;border-radius:20px;border:1px solid rgba(34,197,94,.5);background:rgba(255,255,255,.05);color:white;font-size:17px;outline:none}
+.container{width:90%;max-width:1200px;margin:auto}
+.judul{text-align:center;margin-bottom:35px}.judul h2{font-size:38px}.judul p{color:#aaa;margin-top:10px}
+.admin-panel,.password-panel,.detail-box,.order-box{display:none;margin:50px 0;background:rgba(255,255,255,.05);border:1px solid rgba(34,197,94,.5);border-radius:25px;padding:30px}
+.order-box{position:relative}.close-order{position:absolute;top:18px;right:18px;width:42px;height:42px;border-radius:50%;background:red;color:white;border:none;box-shadow:none;padding:0;font-size:22px;cursor:pointer}
+input,textarea,select{width:100%;padding:15px;margin:10px 0;border-radius:15px;border:1px solid rgba(255,255,255,.2);background:#06110f;color:white}
+textarea{resize:none;height:90px}.tambahan-input{height:140px}
+.upload-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0 20px}
+button{background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;padding:15px 25px;border-radius:15px;font-weight:bold;cursor:pointer;box-shadow:0 8px 0 #15803d;transition:.2s}
+button:hover{transform:translateY(-5px)}
+.produk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px}
+.produk{position:relative;background:rgba(255,255,255,.05);border:1px solid rgba(34,197,94,.5);border-radius:25px;padding:20px;text-align:center;cursor:pointer;transition:.3s}
+.produk:hover{transform:translateY(-10px);box-shadow:0 0 30px rgba(34,197,94,.4)}
+.produk img{width:100%;height:180px;object-fit:cover;border-radius:18px;margin-bottom:15px;background:#111}
+.produk h3{font-size:24px}.harga{color:#22c55e;font-size:30px;font-weight:bold;margin:15px 0}.produk p{color:#ccc}
+.hapus-btn{position:absolute;top:15px;right:15px;width:42px;height:42px;border-radius:50%;background:red;border:none;color:white;font-size:18px;display:none;box-shadow:none;padding:0}
+.admin-mode .hapus-btn{display:block}
+.detail-content{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+.detail-content img{width:100%;height:320px;object-fit:cover;border-radius:22px;border:1px solid rgba(34,197,94,.4)}
+#detailGambar{cursor:pointer}.detail-foto-title{margin-top:18px;margin-bottom:12px;color:#22c55e;font-size:22px;font-weight:bold}
+.galeri-foto{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.galeri-foto img{width:100%;height:85px;object-fit:cover;border-radius:12px;cursor:pointer;border:1px solid rgba(34,197,94,.4)}
+.popup-foto{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;z-index:5000;padding:20px}
+.popup-foto img{max-width:95%;max-height:85%;border-radius:18px;border:2px solid #22c55e;object-fit:contain}
+.popup-foto button{position:absolute;top:20px;right:20px;width:45px;height:45px;border-radius:50%;background:red;box-shadow:none;padding:0;font-size:24px}
+.detail-info h2{font-size:38px;color:#22c55e;margin-bottom:15px}.detail-info h3{font-size:34px;margin-bottom:20px}.detail-info p{color:#ccc;line-height:1.7;margin-bottom:20px}
+.tambahan-box{margin:20px 0;padding:18px;border-radius:18px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.45)}
+.tambahan-box h4{color:#22c55e;font-size:22px;margin-bottom:10px}.tambahan-box p{white-space:pre-line;line-height:1.7}.tambahan-box a{color:#38bdf8;font-weight:bold;text-decoration:underline}
+.detail-buttons{display:flex;gap:15px;flex-wrap:wrap}.btn-kembali{background:linear-gradient(135deg,#334155,#0f172a);box-shadow:0 8px 0 #020617}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.pembayaran{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
+.pay-btn{background:#06110f;border:1px solid rgba(34,197,94,.5);padding:20px;border-radius:15px;text-align:center;cursor:pointer}
+.pay-btn.active{background:#22c55e;color:black;font-weight:bold}.order-btn{width:100%;margin-top:20px;font-size:22px}
+footer{text-align:center;padding:40px;color:#aaa}
+@media(max-width:700px){.hero h2{font-size:38px}.form-grid,.pembayaran,.detail-content{grid-template-columns:1fr}.galeri-foto{grid-template-columns:repeat(3,1fr)}.upload-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="popup-foto" id="popupFoto">
+<button onclick="tutupPopupFoto()">×</button>
+<img id="popupGambar" src="">
+</div>
+
+<header>
+<div class="menu-area" id="menuArea">
+<div class="menu-btn" onclick="toggleMenu(event)">
+<span></span><span></span><span></span>
+</div>
+
+<div class="dropdown-menu">
+<h2>🛍️ KIRAM STORE</h2>
+<a onclick="kembaliHome()">🏠 Home</a>
+<a onclick="keProduk()">📦 Produk</a>
+<a onclick="kePembayaran()">💳 Pembayaran</a>
+<a onclick="loginAdmin()">🔐 Login Admin</a>
+<a onclick="bukaGantiPassword()">🔑 Ganti Password</a>
+</div>
+</div>
+
+<div class="logo">
+<h1>KIRAM STORE</h1>
+<p>Premium Digital Product</p>
+</div>
+</header>
+
+<section class="hero">
+<div class="badge">🔥 PREMIUM • AMAN • TERPERCAYA</div>
+<h2>JUAL PRODUK DIGITAL<br><span>LEBIH MODERN</span></h2>
+<p>Cari produk favoritmu dengan mudah.</p>
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="🔍 Cari produk..." onkeyup="cariProduk()">
+</div>
+</section>
+
+<div class="container">
+
+<div class="password-panel" id="passwordPanel">
+<div class="judul">
+<h2>🔑 Ganti Password Admin</h2>
+<p>Masukkan password lama dan password baru.</p>
+</div>
+<input type="password" id="passwordLama" placeholder="Password Lama">
+<input type="password" id="passwordBaru" placeholder="Password Baru">
+<input type="password" id="passwordKonfirmasi" placeholder="Ulangi Password Baru">
+<button onclick="gantiPassword()">Simpan Password Baru</button>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+<div class="judul">
+<h2>Panel Admin</h2>
+<p>Tambah produk dan kelola toko.</p>
+</div>
+
+<input type="text" id="namaProdukBaru" placeholder="Nama Produk">
+<input type="text" id="hargaProdukBaru" placeholder="Harga Produk">
+<input type="text" id="nomorSellerBaru" placeholder="Nomor Seller">
+
+<textarea id="deskripsiProdukBaru" placeholder="Deskripsi Produk"></textarea>
+<textarea class="tambahan-input" id="deskripsiTambahanBaru" placeholder="Deskripsi Tambahan"></textarea>
+
+<label>Foto Produk Utama:</label>
+<input type="file" id="fotoProdukBaru" accept="image/*">
+
+<label>Foto Detail Produk 1 sampai 10:</label>
+<div class="upload-grid">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+<input type="file" class="foto-detail" accept="image/*">
+</div>
+
+<button onclick="tambahProduk()">+ Publish Produk</button>
+</div>
+
+<div class="judul" id="produk">
+<h2>Produk KIRAM STORE</h2>
+<p>Klik produk untuk melihat detail.</p>
+</div>
+
+<div class="produk-list" id="daftarProduk"></div>
+
+<div class="detail-box" id="detailBox">
+<div class="detail-content">
+<div>
+<img id="detailGambar" src="" onclick="lihatFotoJelas(this.src)">
+<h3 class="detail-foto-title" id="judulDetailFoto">Detail Produk</h3>
+<div class="galeri-foto" id="galeriFoto"></div>
+</div>
+
+<div class="detail-info">
+<h2 id="detailNama">Nama Produk</h2>
+<h3 id="detailHarga">Harga Produk</h3>
+<p id="detailDeskripsi">Deskripsi produk</p>
+
+<div class="tambahan-box">
+<h4>📌 Deskripsi Tambahan</h4>
+<p id="detailTambahan">Deskripsi tambahan akan muncul di sini.</p>
+</div>
+
+<div class="detail-buttons">
+<button onclick="lanjutOrder()">Lanjut Order</button>
+<button class="btn-kembali" onclick="kembaliKeProduk()">Kembali Produk</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="order-box" id="order">
+<button class="close-order" onclick="kembaliKeDetail()">×</button>
+<div class="judul">
+<h2>Format Pembayaran</h2>
+<p>Order akan dikirim ke seller.</p>
+</div>
+
+<div class="form-grid">
+<div>
+<label>Pilih Produk :</label>
+<select id="pilihProduk">
+<option value="">-- Pilih Produk --</option>
+</select>
+</div>
+
+<div>
+<label>Jumlah Produk :</label>
+<input type="number" id="jumlahProduk" placeholder="Contoh: 1">
+</div>
+</div>
+
+<label>Pembayaran :</label>
+<div class="pembayaran">
+<div class="pay-btn" onclick="pilihPembayaran(this,'QRIS')">💳 QRIS</div>
+<div class="pay-btn" onclick="pilihPembayaran(this,'DANA')">💙 DANA</div>
+<div class="pay-btn" onclick="pilihPembayaran(this,'GOPAY')">🟢 GOPAY</div>
+</div>
+
+<button class="order-btn" onclick="orderSekarang()">💬 ORDER SEKARANG</button>
+</div>
+
+</div>
+
+<footer>© 2026 KIRAM STORE</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyCQEpdewrc4EbWbJ4u50QJtD5KdvPSe3QM",
+authDomain: "kiram-store.firebaseapp.com",
+projectId: "kiram-store",
+storageBucket: "kiram-store.firebasestorage.app",
+messagingSenderId: "1092270611106",
+appId: "1:1092270611106:web:bc787754bbc7b9bf5415fb"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let pembayaranDipilih="";
+let adminLogin=false;
+let passwordAdmin=localStorage.getItem("passwordAdminKiram")||"kiram123";
+let produkDetailAktif="";
+let nomorSellerAktif="";
+
+window.toggleMenu=function(event){
+event.stopPropagation();
+document.getElementById("menuArea").classList.toggle("active");
+}
+
+document.addEventListener("click",function(e){
+let menuArea=document.getElementById("menuArea");
+if(!menuArea.contains(e.target)){
+menuArea.classList.remove("active");
+}
+});
+
+function tutupMenu(){
+document.getElementById("menuArea").classList.remove("active");
+}
+
+window.kembaliHome=function(){
+tutupMenu();
+adminLogin=false;
+document.body.classList.remove("admin-mode");
+document.getElementById("adminPanel").style.display="none";
+document.getElementById("passwordPanel").style.display="none";
+document.getElementById("detailBox").style.display="none";
+document.getElementById("order").style.display="none";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+window.keProduk=function(){
+tutupMenu();
+document.getElementById("produk").scrollIntoView({behavior:"smooth"});
+}
+
+window.kePembayaran=function(){
+tutupMenu();
+document.getElementById("order").style.display="block";
+document.getElementById("order").scrollIntoView({behavior:"smooth"});
+}
+
+window.loginAdmin=function(){
+tutupMenu();
+let password=prompt("Masukkan password admin:");
+if(password===passwordAdmin){
+adminLogin=true;
+document.getElementById("adminPanel").style.display="block";
+document.body.classList.add("admin-mode");
+document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
+alert("Login admin berhasil!");
+}else{
+alert("Password salah!");
+}
+}
+
+window.bukaGantiPassword=function(){
+tutupMenu();
+let password=prompt("Masukkan password admin untuk membuka menu ganti password:");
+if(password!==passwordAdmin){
+alert("Password salah! Menu ganti password tidak dibuka.");
+return;
+}
+document.getElementById("passwordPanel").style.display="block";
+document.getElementById("passwordPanel").scrollIntoView({behavior:"smooth"});
+}
+
+window.gantiPassword=function(){
+let lama=document.getElementById("passwordLama").value;
+let baru=document.getElementById("passwordBaru").value;
+let konfirmasi=document.getElementById("passwordKonfirmasi").value;
+
+if(lama==""||baru==""||konfirmasi==""){
+alert("Isi semua kolom password!");
+return;
+}
+if(lama!==passwordAdmin){
+alert("Password lama salah!");
+return;
+}
+if(baru.length<4){
+alert("Password baru minimal 4 karakter!");
+return;
+}
+if(baru!==konfirmasi){
+alert("Konfirmasi password tidak sama!");
+return;
+}
+
+passwordAdmin=baru;
+localStorage.setItem("passwordAdminKiram",passwordAdmin);
+
+document.getElementById("passwordLama").value="";
+document.getElementById("passwordBaru").value="";
+document.getElementById("passwordKonfirmasi").value="";
+
+alert("Password berhasil diganti!");
+}
+
+function rapikanNomor(nomor){
+let hasil=nomor.replace(/\D/g,"");
+if(hasil.startsWith("0")){
+hasil="62"+hasil.slice(1);
+}
+return hasil;
+}
+
+function ubahLinkJadiKlik(teks){
+let aman=(teks||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+return aman.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank">$1</a>');
+}
+
+window.cariProduk=function(){
+let input=document.getElementById("searchInput").value.toLowerCase();
+let semuaProduk=document.querySelectorAll(".produk");
+semuaProduk.forEach(produk=>{
+let nama=produk.innerText.toLowerCase();
+produk.style.display=nama.includes(input)?"block":"none";
+});
+}
+
+function bacaFoto(file){
+return new Promise(resolve=>{
+if(!file){
+resolve("");
+return;
+}
+let reader=new FileReader();
+reader.onload=function(e){
+resolve(e.target.result);
+};
+reader.readAsDataURL(file);
+});
+}
+
+async function loadProdukFirebase(){
+document.getElementById("daftarProduk").innerHTML="";
+document.getElementById("pilihProduk").innerHTML='<option value="">-- Pilih Produk --</option>';
+
+let hasil=await getDocs(collection(db,"products"));
+
+hasil.forEach(item=>{
+let data=item.data();
+
+buatProduk(
+item.id,
+data.nama || "",
+data.harga || "",
+data.nomorSeller || "",
+data.deskripsi || "",
+data.deskripsiTambahan || "",
+data.gambar || "",
+data.galeri || []
+);
+});
+}
+
+window.tambahProduk=async function(){
+if(adminLogin===false){
+alert("Hanya admin yang bisa publish produk!");
+return;
+}
+
+let nama=document.getElementById("namaProdukBaru").value;
+let harga=document.getElementById("hargaProdukBaru").value;
+let nomorSeller=document.getElementById("nomorSellerBaru").value;
+let deskripsi=document.getElementById("deskripsiProdukBaru").value;
+let deskripsiTambahan=document.getElementById("deskripsiTambahanBaru").value;
+let fotoUtama=document.getElementById("fotoProdukBaru").files[0];
+
+if(nama==""||harga==""||nomorSeller==""||deskripsi==""||deskripsiTambahan==""){
+alert("Isi semua data produk!");
+return;
+}
+
+nomorSeller=rapikanNomor(nomorSeller);
+
+let gambarUtama=await bacaFoto(fotoUtama);
+if(gambarUtama==""){
+gambarUtama="https://via.placeholder.com/400x250?text=KIRAM+STORE";
+}
+
+let galeri=[];
+let inputFotoDetail=document.querySelectorAll(".foto-detail");
+
+for(let i=0;i<inputFotoDetail.length;i++){
+let file=inputFotoDetail[i].files[0];
+if(file){
+let hasilFoto=await bacaFoto(file);
+galeri.push(hasilFoto);
+}
+}
+
+try{
+await addDoc(collection(db,"products"),{
+nama:nama,
+harga:harga,
+nomorSeller:nomorSeller,
+deskripsi:deskripsi,
+deskripsiTambahan:deskripsiTambahan,
+gambar:gambarUtama,
+galeri:galeri,
+tanggal:Date.now()
+});
+
+document.getElementById("namaProdukBaru").value="";
+document.getElementById("hargaProdukBaru").value="";
+document.getElementById("nomorSellerBaru").value="";
+document.getElementById("deskripsiProdukBaru").value="";
+document.getElementById("deskripsiTambahanBaru").value="";
+document.getElementById("fotoProdukBaru").value="";
+inputFotoDetail.forEach(input=>input.value="");
+
+alert("Produk berhasil dipublish dan tersimpan online!");
+loadProdukFirebase();
+
+}catch(error){
+alert("Gagal menyimpan produk. Coba pakai foto yang lebih kecil.");
+console.log(error);
+}
+}
+
+function buatProduk(id,nama,harga,nomorSeller,deskripsi,deskripsiTambahan,gambar,galeri){
+let daftar=document.getElementById("daftarProduk");
+let card=document.createElement("div");
+card.className="produk";
+
+card.innerHTML=`
+<button class="hapus-btn">🗑</button>
+<img src="${gambar}">
+<h3>${nama}</h3>
+<div class="harga">${harga}</div>
+<p>${deskripsi}</p>
+`;
+
+card.onclick=function(e){
+if(e.target.classList.contains("hapus-btn")) return;
+bukaDetailProduk(nama,harga,nomorSeller,deskripsi,deskripsiTambahan,gambar,galeri);
+};
+
+let hapus=card.querySelector(".hapus-btn");
+
+hapus.onclick=async function(e){
+e.stopPropagation();
+
+if(adminLogin===false){
+alert("Hanya admin yang bisa hapus!");
+return;
+}
+
+if(confirm("Hapus produk?")){
+try{
+await deleteDoc(doc(db,"products",id));
+alert("Produk berhasil dihapus!");
+loadProdukFirebase();
+}catch(error){
+alert("Gagal hapus produk!");
+console.log(error);
+}
+}
+};
+
+daftar.appendChild(card);
+
+let option=document.createElement("option");
+option.value=nama+" - "+harga;
+option.textContent=nama+" - "+harga;
+option.setAttribute("data-seller",nomorSeller);
+document.getElementById("pilihProduk").appendChild(option);
+}
+
+function bukaDetailProduk(nama,harga,nomorSeller,deskripsi,deskripsiTambahan,gambar,galeri){
+produkDetailAktif=nama+" - "+harga;
+nomorSellerAktif=nomorSeller;
+
+document.getElementById("detailGambar").src=gambar;
+document.getElementById("detailNama").innerText=nama;
+document.getElementById("detailHarga").innerText=harga;
+document.getElementById("detailDeskripsi").innerText=deskripsi;
+document.getElementById("detailTambahan").innerHTML=ubahLinkJadiKlik(deskripsiTambahan);
+
+let galeriBox=document.getElementById("galeriFoto");
+let judulDetailFoto=document.getElementById("judulDetailFoto");
+
+galeriBox.innerHTML="";
+judulDetailFoto.style.display=galeri.length>0?"block":"none";
+
+galeri.forEach(foto=>{
+let img=document.createElement("img");
+img.src=foto;
+img.onclick=function(){
+lihatFotoJelas(foto);
+};
+galeriBox.appendChild(img);
+});
+
+document.getElementById("detailBox").style.display="block";
+document.getElementById("order").style.display="none";
+document.getElementById("detailBox").scrollIntoView({behavior:"smooth"});
+}
+
+window.lihatFotoJelas=function(foto){
+if(foto=="") return;
+document.getElementById("popupGambar").src=foto;
+document.getElementById("popupFoto").style.display="flex";
+}
+
+window.tutupPopupFoto=function(){
+document.getElementById("popupFoto").style.display="none";
+}
+
+window.lanjutOrder=function(){
+document.getElementById("pilihProduk").value=produkDetailAktif;
+document.getElementById("order").style.display="block";
+document.getElementById("order").scrollIntoView({behavior:"smooth"});
+}
+
+window.kembaliKeDetail=function(){
+document.getElementById("order").style.display="none";
+document.getElementById("detailBox").style.display="block";
+document.getElementById("detailBox").scrollIntoView({behavior:"smooth"});
+}
+
+window.kembaliKeProduk=function(){
+document.getElementById("detailBox").style.display="none";
+document.getElementById("order").style.display="none";
+document.getElementById("produk").scrollIntoView({behavior:"smooth"});
+}
+
+window.pilihPembayaran=function(element,metode){
+pembayaranDipilih=metode;
+let semua=document.querySelectorAll(".pay-btn");
+semua.forEach(btn=>btn.classList.remove("active"));
+element.classList.add("active");
+}
+
+window.orderSekarang=function(){
+let produk=document.getElementById("pilihProduk").value;
+let jumlah=document.getElementById("jumlahProduk").value;
+let select=document.getElementById("pilihProduk");
+let selectedOption=select.options[select.selectedIndex];
+let nomorTujuan=nomorSellerAktif;
+
+if(selectedOption&&selectedOption.getAttribute("data-seller")){
+nomorTujuan=selectedOption.getAttribute("data-seller");
+}
+
+if(produk==""||jumlah==""||pembayaranDipilih==""){
+alert("Lengkapi data!");
+return;
+}
+
+if(nomorTujuan==""){
+alert("Nomor seller tidak ditemukan!");
+return;
+}
+
+let pesan=
+`Halo seller KIRAM STORE saya mau order
+
+Produk : ${produk}
+Jumlah : ${jumlah}
+Pembayaran : ${pembayaranDipilih}
+
+Mohon diproses ya`;
+
+let link="https://wa.me/"+nomorTujuan+"?text="+encodeURIComponent(pesan);
+window.open(link,"_blank");
+}
+
+loadProdukFirebase();
+</script>
+
+</body>
+</html>
